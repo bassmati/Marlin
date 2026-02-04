@@ -266,6 +266,73 @@
       #define LCD_PINS_EN            EXP1_08_PIN
       #define LCD_PINS_D4            EXP1_06_PIN
 
+    #elif ENABLED(GENERIC_12864_LCD)
+
+    /**
+     * 1286 LCD PANEL SPI display pinout
+     *
+     *                Board                                     Display
+     *                ------
+     *           PB6 | 1  2 | PB5             GND  Vo  R/W DB0 DB2  DB4   DB6   PSB   RST   BLa
+     *         RESET | 3  4 | PA9            ------------------------------------------------------
+     *           PB9   5  6 | PA10 (LCD_D4)  | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 |
+     *  (LCD_RS) PB7 | 7  8 | PB8  (LCD_EN)  ------------------------------------------------------
+     *           GND | 9 10 | 5V                Vcc  RS  E   DB1 DB3   DB5   DB7   NC    Vout  BLk
+     *                ------
+     *                  EXP1
+     *
+     * Needs custom cable:
+     *
+     *    Board             Display
+     *
+     *  EXP1-6  -----------  DIS-4     SCK
+     *  EXP1-7  ------------ DIS-8     CS
+     *  EXP1-8  ------------ DIS-5     MOSI
+     *  EXP1-9  ------------ DIS-1,20  GND
+     *  EXP1-10 ------------ DIS-2,19  5V
+     */
+
+      #define LCD_PINS_D4            EXP1_06_PIN
+      #define LCD_PINS_RS            EXP1_07_PIN
+      #define LCD_PINS_EN            EXP1_08_PIN
+
+
+    /**
+     * Keypad PANEL pinout (Shift register 74HC165D + 74HC14D Hex-inverting Schmitt trigger)
+     *
+     *               Board                             Keypad
+     *               ------
+     *          5V  | 1  2 | GND                 Vcc  *nPL    -
+     *   (CS)   PD9 | 3  4 | PA5 (CLK)         --- -------------- ---
+     *   (MOSI) PA7 | 5  6 | PA6 (MISO)        |  1  2  3  4  5  6  |
+     *          3V3 | 7  8 | GND               ----------------------
+     *               ------                         *Q7   *CP   GND
+     *                SPI1
+     *                                         *signal going 2x through the inverter IC
+     *            -------------
+     *            | 1 2 3 4 5 | PD0 PD2 PD3 PD4 PD5
+     *            -------------
+     *                I/O
+     *
+     * Needs custom cable (can't use SPI1 pins directy, cause it interferes with the SD card):
+     *
+     *  Board               Keypad
+     *
+     *  SPI1-1 ------------ KEY-1    +5V
+     *  SPI1-2 ------------ KEY-6    GND
+     *  IO-4   ------------ KEY-3    CS
+     *  IO-3   ------------ KEY-4    CLK
+     *  IO-5   ------------ KEY-2    MISO
+     */
+
+      #define IO_03_PIN   PD3
+      #define IO_04_PIN   PD4
+      #define IO_05_PIN   PD5
+
+      #define SHIFT_LD_PIN           IO_04_PIN
+      #define SHIFT_CLK_PIN          IO_03_PIN
+      #define SHIFT_OUT_PIN          IO_05_PIN
+
     #elif ENABLED(ZONESTAR_LCD)                   // ANET A8 LCD Controller - Must convert to 3.3V - CONNECTING TO 5V WILL DAMAGE THE BOARD!
 
       CONTROLLER_WARNING("BTT_SKR_MINI_E3_V3_0", "ZONESTAR_LCD")
