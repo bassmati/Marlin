@@ -287,6 +287,11 @@
   #define LCD_ST7920_DELAY_2           125
   #define LCD_ST7920_DELAY_3           125
 
+#elif ENABLED(GENERIC_12864_LCD)
+
+  #define IS_RRD_FG_SC 1
+  #define NO_LCD_SDCARD
+
 #elif ANY(ANET_FULL_GRAPHICS_LCD, CTC_A10S_A13)
 
   #define IS_RRD_FG_SC 1

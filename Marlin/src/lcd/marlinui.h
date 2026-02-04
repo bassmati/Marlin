@@ -828,9 +828,9 @@ public:
 
   #if HAS_ENCODER_ACTION
 
-    static volatile uint8_t buttons;
+    static volatile uint16_t buttons;
     #if IS_RRW_KEYPAD
-      static volatile uint8_t keypad_buttons;
+      static volatile uint16_t keypad_buttons;
       static bool handle_keypad();
     #endif
     #if HAS_SLOW_BUTTONS

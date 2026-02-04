@@ -111,32 +111,34 @@
 #endif
 
 #if IS_RRW_KEYPAD
-  #define BTN_OFFSET          0 // Bit offset into buttons for shift register values
+  #define BTN_OFFSET          1 // Bit offset into buttons for shift register values
 
-  #define BLEN_KEYPAD_F3      0
-  #define BLEN_KEYPAD_F2      1
-  #define BLEN_KEYPAD_F1      2
-  #define BLEN_KEYPAD_DOWN    3
-  #define BLEN_KEYPAD_RIGHT   4
-  #define BLEN_KEYPAD_MIDDLE  5
-  #define BLEN_KEYPAD_UP      6
-  #define BLEN_KEYPAD_LEFT    7
+  #define BLEN_KEYPAD_PREHEAT 0
+  #define BLEN_KEYPAD_SD      1
+  #define BLEN_KEYPAD_UP      2
+  #define BLEN_KEYPAD_ZUP     3
+  #define BLEN_KEYPAD_PLYPSE  4
+  #define BLEN_KEYPAD_DOWN    5
+  #define BLEN_KEYPAD_ZDOWN   6
+  #define BLEN_KEYPAD_HOME    7
+  #define BLEN_KEYPAD_OK      8
 
-  #define EN_KEYPAD_F1      _BV(BTN_OFFSET + BLEN_KEYPAD_F1)
-  #define EN_KEYPAD_F2      _BV(BTN_OFFSET + BLEN_KEYPAD_F2)
-  #define EN_KEYPAD_F3      _BV(BTN_OFFSET + BLEN_KEYPAD_F3)
-  #define EN_KEYPAD_DOWN    _BV(BTN_OFFSET + BLEN_KEYPAD_DOWN)
-  #define EN_KEYPAD_RIGHT   _BV(BTN_OFFSET + BLEN_KEYPAD_RIGHT)
-  #define EN_KEYPAD_MIDDLE  _BV(BTN_OFFSET + BLEN_KEYPAD_MIDDLE)
-  #define EN_KEYPAD_UP      _BV(BTN_OFFSET + BLEN_KEYPAD_UP)
-  #define EN_KEYPAD_LEFT    _BV(BTN_OFFSET + BLEN_KEYPAD_LEFT)
+  #define EN_KEYPAD_PREHEAT   _BV(BTN_OFFSET + BLEN_KEYPAD_PREHEAT)
+  #define EN_KEYPAD_SD        _BV(BTN_OFFSET + BLEN_KEYPAD_SD)
+  #define EN_KEYPAD_UP        _BV(BTN_OFFSET + BLEN_KEYPAD_UP)
+  #define EN_KEYPAD_ZUP       _BV(BTN_OFFSET + BLEN_KEYPAD_ZUP)
+  #define EN_KEYPAD_PLYPSE    _BV(BTN_OFFSET + BLEN_KEYPAD_PLYPSE)
+  #define EN_KEYPAD_DOWN      _BV(BTN_OFFSET + BLEN_KEYPAD_DOWN)
+  #define EN_KEYPAD_ZDOWN     _BV(BTN_OFFSET + BLEN_KEYPAD_ZDOWN)
+  #define EN_KEYPAD_HOME      _BV(BTN_OFFSET + BLEN_KEYPAD_HOME)
+  #define EN_KEYPAD_OK        _BV(BTN_OFFSET + BLEN_KEYPAD_OK)
 
   #define RRK(B) (keypad_buttons & (B))
 
   #ifdef EN_C
-    #define BUTTON_CLICK() ((buttons & EN_C) || RRK(EN_KEYPAD_MIDDLE))
+    #define BUTTON_CLICK() ((buttons & EN_C) || RRK(BLEN_KEYPAD_OK))
   #else
-    #define BUTTON_CLICK() RRK(EN_KEYPAD_MIDDLE)
+    //#define BUTTON_CLICK() RRK(BLEN_KEYPAD_OK)
   #endif
 #endif
 

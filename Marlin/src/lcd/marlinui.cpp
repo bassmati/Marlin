@@ -372,7 +372,7 @@ void MarlinUI::init() {
   #endif
 
   #if HAS_ENCODER_ACTION
-    volatile uint8_t MarlinUI::buttons;
+    volatile uint16_t MarlinUI::buttons;
     #if HAS_SLOW_BUTTONS
       volatile uint8_t MarlinUI::slow_buttons;
     #endif
@@ -537,7 +537,7 @@ void MarlinUI::init() {
 
   #if IS_RRW_KEYPAD && HAS_ENCODER_ACTION
 
-    volatile uint8_t MarlinUI::keypad_buttons;
+    volatile uint16_t MarlinUI::keypad_buttons;
 
     #if HAS_MARLINUI_MENU && !HAS_ADC_BUTTONS
 
@@ -588,10 +588,11 @@ void MarlinUI::init() {
 
         static uint8_t keypad_debounce = 0;
 
-        if (!RRK( EN_KEYPAD_F1    | EN_KEYPAD_F2
-                | EN_KEYPAD_F3    | EN_KEYPAD_DOWN
-                | EN_KEYPAD_RIGHT | EN_KEYPAD_MIDDLE
-                | EN_KEYPAD_UP    | EN_KEYPAD_LEFT )
+        if (!RRK( EN_KEYPAD_PREHEAT | EN_KEYPAD_SD
+                | EN_KEYPAD_UP      | EN_KEYPAD_ZUP
+                | EN_KEYPAD_PLYPSE  | EN_KEYPAD_DOWN
+                | EN_KEYPAD_ZDOWN   | EN_KEYPAD_HOME
+                | EN_KEYPAD_OK)
         ) {
           if (keypad_debounce > 0) keypad_debounce--;
         }
@@ -602,26 +603,50 @@ void MarlinUI::init() {
 
           #if HAS_MARLINUI_MENU
 
-            if (RRK(EN_KEYPAD_MIDDLE))  goto_screen(menu_move);
+            if (RRK(EN_KEYPAD_PREHEAT)){
+              LCD_MESSAGE(MSG_BIT1_PREHEAT);
+              /*clear_menu_history();
+              quick_feedback();
+              goto_screen(menu_move); // this is the "motion" menu command, missing the DS funcionality here?!?!
+              */
+            }
+            if (RRK(EN_KEYPAD_SD)){
+              LCD_MESSAGE(MSG_BIT2_SD);
+              /*
+              clear_menu_history();
+              quick_feedback();
+              goto_screen(MEDIA_MENU_GATEWAY); // hopefully the "SD menu"
+              */
+            }
+            if (RRK(EN_KEYPAD_PLYPSE)){
+              LCD_MESSAGE(MSG_BIT5_PLYPSE);
+              /*
+              clear_menu_history();
+              quick_feedback();
+              goto_screen(menu_main); // hopefully the "main menu"
+              */
+            }
+
+            if (RRK(EN_KEYPAD_DOWN)) LCD_MESSAGE(MSG_BIT6_DOWN);
+            if (RRK(EN_KEYPAD_UP)) LCD_MESSAGE(MSG_BIT3_UP);
+
+            if (RRK(EN_KEYPAD_OK)) LCD_MESSAGE(MSG_BIT9_OK);
+            if (RRK(EN_KEYPAD_ZDOWN)) LCD_MESSAGE(MSG_BIT7_ZDOWN); // move to "homed" loop after testing
 
             #if NONE(DELTA, Z_HOME_TO_MAX)
-              if (RRK(EN_KEYPAD_F2))    _reprapworld_keypad_move(Z_AXIS,  1);
+              if (RRK(EN_KEYPAD_ZUP)) LCD_MESSAGE(MSG_BIT4_ZUP);//  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command, WORKS
             #endif
 
             if (homed) {
               #if ANY(DELTA, Z_HOME_TO_MAX)
-                if (RRK(EN_KEYPAD_F2))  _reprapworld_keypad_move(Z_AXIS,  1);
+                //if (RRK(EN_KEYPAD_F2))  _reprapworld_keypad_move(Z_AXIS,  1);
               #endif
-              if (RRK(EN_KEYPAD_F3))    _reprapworld_keypad_move(Z_AXIS, -1);
-              if (RRK(EN_KEYPAD_LEFT))  _reprapworld_keypad_move(X_AXIS, -1);
-              if (RRK(EN_KEYPAD_RIGHT)) _reprapworld_keypad_move(X_AXIS,  1);
-              if (RRK(EN_KEYPAD_DOWN))  _reprapworld_keypad_move(Y_AXIS,  1);
-              if (RRK(EN_KEYPAD_UP))    _reprapworld_keypad_move(Y_AXIS, -1);
+              //if (RRK(EN_KEYPAD_ZDOWN)) LCD_MESSAGE(MSG_BIT2_ZDOWN); //_reprapworld_keypad_move(Z_AXIS, -1); // move Z down command, WORKS
             }
 
           #endif // HAS_MARLINUI_MENU
 
-          if (!homed && RRK(EN_KEYPAD_F1)) queue.inject_P(G28_STR);
+          if (!homed && RRK(EN_KEYPAD_HOME)) LCD_MESSAGE(MSG_BIT8_HOME); // queue.inject_P(G28_STR); // home command, WORKS
           return true;
         }
 
@@ -1455,12 +1480,12 @@ void MarlinUI::init() {
          * These values are independent of which pins are used for EN_A / EN_B indications.
          * The rotary encoder part is also independent of the LCD chipset.
          */
-        uint8_t val = 0;
+        uint16_t val = 0;
         WRITE(SHIFT_LD_PIN, LOW);
         WRITE(SHIFT_LD_PIN, HIGH);
-        for (uint8_t i = 0; i < 8; ++i) {
+        for (uint16_t i = 0; i < 16; ++i) {
           val >>= 1;
-          if (READ(SHIFT_OUT_PIN)) SBI(val, 7);
+          if (READ(SHIFT_OUT_PIN)) SBI(val, 15);
           WRITE(SHIFT_CLK_PIN, HIGH);
           WRITE(SHIFT_CLK_PIN, LOW);
         }

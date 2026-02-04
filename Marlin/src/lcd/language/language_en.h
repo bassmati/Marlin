@@ -1109,6 +1109,16 @@ namespace LanguageWide_en {
     LSTR MSG_HOMING_FEEDRATE_X            = _UxGT("X Homing Feedrate");
     LSTR MSG_HOMING_FEEDRATE_Y            = _UxGT("Y Homing Feedrate");
     LSTR MSG_HOMING_FEEDRATE_Z            = _UxGT("Z Homing Feedrate");
+
+    LSTR MSG_BIT1_PREHEAT     = _UxGT("MSG_BIT0_PREHEAT");
+    LSTR MSG_BIT2_SD          = _UxGT("MSG_BIT1_SD");
+    LSTR MSG_BIT3_UP          = _UxGT("MSG_BIT2_UP");
+    LSTR MSG_BIT4_ZUP         = _UxGT("MSG_BIT3_ZUP");
+    LSTR MSG_BIT5_PLYPSE      = _UxGT("MSG_BIT4_PLYPSE");
+    LSTR MSG_BIT6_DOWN        = _UxGT("MSG_BIT5_DOWN");
+    LSTR MSG_BIT7_ZDOWN       = _UxGT("MSG_BIT6_ZDOWN");
+    LSTR MSG_BIT8_HOME        = _UxGT("MSG_BIT7_HOME");
+    LSTR MSG_BIT9_OK          = _UxGT("MSG_BIT8_OK");
   #endif
 }
 
