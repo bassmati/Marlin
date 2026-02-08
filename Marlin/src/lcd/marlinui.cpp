@@ -604,14 +604,14 @@ void MarlinUI::init() {
           #if HAS_MARLINUI_MENU
 
             if (RRK(EN_KEYPAD_PREHEAT)){
-              LCD_MESSAGE(MSG_BIT1_PREHEAT);
+              SERIAL_ECHO_MSG("Button PREHEAT pressed (bit ",EN_KEYPAD_PREHEAT,")");
               /*clear_menu_history();
               quick_feedback();
               goto_screen(menu_move); // this is the "motion" menu command, missing the DS funcionality here?!?!
               */
             }
             if (RRK(EN_KEYPAD_SD)){
-              LCD_MESSAGE(MSG_BIT2_SD);
+              SERIAL_ECHO_MSG("Button SD pressed (bit ",EN_KEYPAD_SD,")");
               /*
               clear_menu_history();
               quick_feedback();
@@ -619,7 +619,7 @@ void MarlinUI::init() {
               */
             }
             if (RRK(EN_KEYPAD_PLYPSE)){
-              LCD_MESSAGE(MSG_BIT5_PLYPSE);
+              SERIAL_ECHO_MSG("Button play/pause pressed (bit ",EN_KEYPAD_PLYPSE,")");
               /*
               clear_menu_history();
               quick_feedback();
@@ -627,14 +627,18 @@ void MarlinUI::init() {
               */
             }
 
-            if (RRK(EN_KEYPAD_DOWN)) LCD_MESSAGE(MSG_BIT6_DOWN);
-            if (RRK(EN_KEYPAD_UP)) LCD_MESSAGE(MSG_BIT3_UP);
+            if (RRK(EN_KEYPAD_DOWN)) SERIAL_ECHO_MSG("DOWN pressed (bit ",EN_KEYPAD_DOWN,")");
+            if (RRK(EN_KEYPAD_UP)) SERIAL_ECHO_MSG("UP pressed (bit ",EN_KEYPAD_UP,")");
 
-            if (RRK(EN_KEYPAD_OK)) LCD_MESSAGE(MSG_BIT9_OK);
-            if (RRK(EN_KEYPAD_ZDOWN)) LCD_MESSAGE(MSG_BIT7_ZDOWN); // move to "homed" loop after testing
+            if (RRK(EN_KEYPAD_OK)){
+              lcd_clicked = true;
+              SERIAL_ECHO_MSG("OK pressed (bit ",EN_KEYPAD_OK,")");
+            }
+
+            if (RRK(EN_KEYPAD_ZDOWN)) SERIAL_ECHO_MSG("Z down pressed (bit ",EN_KEYPAD_ZDOWN,")"); // move to "homed" loop after testing
 
             #if NONE(DELTA, Z_HOME_TO_MAX)
-              if (RRK(EN_KEYPAD_ZUP)) LCD_MESSAGE(MSG_BIT4_ZUP);//  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command, WORKS
+              if (RRK(EN_KEYPAD_ZUP)) SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");//  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command, WORKS
             #endif
 
             if (homed) {
@@ -646,7 +650,7 @@ void MarlinUI::init() {
 
           #endif // HAS_MARLINUI_MENU
 
-          if (!homed && RRK(EN_KEYPAD_HOME)) LCD_MESSAGE(MSG_BIT8_HOME); // queue.inject_P(G28_STR); // home command, WORKS
+          if (!homed && RRK(EN_KEYPAD_HOME))  SERIAL_ECHO_MSG("HOME pressed (bit ",EN_KEYPAD_HOME,")"); // queue.inject_P(G28_STR); // home command, WORKS
           return true;
         }
 
