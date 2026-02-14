@@ -768,6 +768,7 @@ public:
   #endif // !HAS_MARLINUI_MENU
 
   #if ANY(HAS_MARLINUI_MENU, EXTENSIBLE_UI)
+    static bool upDownButtonPressed;
     static bool lcd_clicked;
     static bool use_click() {
       const bool click = lcd_clicked;

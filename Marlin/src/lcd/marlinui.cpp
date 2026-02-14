@@ -197,6 +197,7 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
 
 #if ANY(HAS_MARLINUI_MENU, EXTENSIBLE_UI)
   bool MarlinUI::lcd_clicked;
+  bool MarlinUI::upDownButtonPressed;
 #endif
 
 #if LCD_WITH_BLINK
@@ -627,8 +628,17 @@ void MarlinUI::init() {
               */
             }
 
-            if (RRK(EN_KEYPAD_DOWN)) SERIAL_ECHO_MSG("DOWN pressed (bit ",EN_KEYPAD_DOWN,")");
-            if (RRK(EN_KEYPAD_UP)) SERIAL_ECHO_MSG("UP pressed (bit ",EN_KEYPAD_UP,")");
+            if (RRK(EN_KEYPAD_DOWN)){
+              SERIAL_ECHO_MSG("DOWN pressed (bit ",EN_KEYPAD_DOWN,")");
+              upDownButtonPressed = true;
+              encoderPosition += epps;
+            }
+
+            if (RRK(EN_KEYPAD_UP)) {
+              SERIAL_ECHO_MSG("UP pressed (bit ",EN_KEYPAD_UP,")");
+              upDownButtonPressed = true;
+              encoderPosition -= epps;
+            }
 
             if (RRK(EN_KEYPAD_OK)){
               lcd_clicked = true;
@@ -745,14 +755,16 @@ void MarlinUI::init() {
     #if ENABLED(ULTIPANEL_FEEDMULTIPLY)
 
       const int16_t old_frm = motion.feedrate_percentage;
-            int16_t new_frm = old_frm + int16_t(encoderPosition);
+            int16_t new_frm = old_frm - int16_t(encoderPosition);
 
       // Dead zone at 100% feedrate
       if (old_frm == 100) {
-        if (int16_t(encoderPosition) > ENCODER_FEEDRATE_DEADZONE)
-          new_frm -= ENCODER_FEEDRATE_DEADZONE;
-        else if (int16_t(encoderPosition) < -(ENCODER_FEEDRATE_DEADZONE))
+        if (int16_t(encoderPosition) > ENCODER_FEEDRATE_DEADZONE){
           new_frm += ENCODER_FEEDRATE_DEADZONE;
+        }
+        else if (int16_t(encoderPosition) < -(ENCODER_FEEDRATE_DEADZONE)) {
+          new_frm -= ENCODER_FEEDRATE_DEADZONE;
+        }
         else
           new_frm = old_frm;
       }
@@ -1157,7 +1169,8 @@ void MarlinUI::init() {
         }
 
         // Has the wheel advanced by a step or the encoder done a click?
-        if (encoderPastThreshold || lcd_clicked) {
+        if (encoderPastThreshold || lcd_clicked || upDownButtonPressed) {
+          upDownButtonPressed = false;
 
           // Retain the current screen
           reset_status_timeout(ms);
