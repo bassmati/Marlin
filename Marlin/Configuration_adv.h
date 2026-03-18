@@ -4320,14 +4320,14 @@
  * User-defined buttons to run custom G-code.
  * Up to 25 may be defined.
  */
-//#define CUSTOM_USER_BUTTONS
+#define CUSTOM_USER_BUTTONS
 #if ENABLED(CUSTOM_USER_BUTTONS)
-  //#define BUTTON1_PIN -1
+  #define BUTTON1_PIN PD2                   // connected to PWR-CTRL circuit, "OUTPUT LOW Shutdown signal" pin
   #if PIN_EXISTS(BUTTON1)
     #define BUTTON1_HIT_STATE     LOW       // State of the triggered button. NC=LOW. NO=HIGH.
     #define BUTTON1_WHEN_PRINTING false     // Button allowed to trigger during printing?
-    #define BUTTON1_GCODE         "G28"
-    #define BUTTON1_DESC          "Homing"  // Optional string to set the LCD status
+    #define BUTTON1_GCODE         "M81"
+    #define BUTTON1_DESC          "Power OFF"  // Optional string to set the LCD status
     //#define BUTTON1_IMMEDIATE             // Skip the queue and execute immediately. Rarely needed.
   #endif
 

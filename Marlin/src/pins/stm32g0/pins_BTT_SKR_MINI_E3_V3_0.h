@@ -76,18 +76,18 @@
 // Filament Runout Sensor
 //
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                    PC12  // E0-STOP (was PC15, swapped with POWER_LOSS_PIN)
+  #define FIL_RUNOUT_PIN                    PC13  // E0-STOP (was PC15)
 #endif
 
 //
 // Power-loss Detection
 //
 #ifndef POWER_LOSS_PIN
-  #define POWER_LOSS_PIN                    PC15  // Power Loss Detection: PWR-DET (was PC12, swapped with FIL_RUNOUT_PIN)
+  #define POWER_LOSS_PIN                    PC15  // Power Loss Detection: PWR-DET (was PC12) - connected to the middle pin of AC-detect circuit
 #endif
 
 #ifndef PS_ON_PIN
-  #define PS_ON_PIN                         PC13  // Power Supply Control
+  #define PS_ON_PIN                         PC12  // Power Supply Control (was PC13) - connected to PWR-CTRL circuit, "INPUT HIGH Shutdown" pin
 #endif
 
 //
