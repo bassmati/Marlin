@@ -76,14 +76,14 @@
 // Filament Runout Sensor
 //
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                    PC15  // E0-STOP
+  #define FIL_RUNOUT_PIN                    PC12  // E0-STOP (was PC15, swapped with POWER_LOSS_PIN)
 #endif
 
 //
 // Power-loss Detection
 //
 #ifndef POWER_LOSS_PIN
-  #define POWER_LOSS_PIN                    PC12  // Power Loss Detection: PWR-DET
+  #define POWER_LOSS_PIN                    PC15  // Power Loss Detection: PWR-DET (was PC12, swapped with FIL_RUNOUT_PIN)
 #endif
 
 #ifndef PS_ON_PIN
