@@ -3236,7 +3236,7 @@
 // Generic 128×64 LCD (12864B)
 //
 #define GENERIC_12864_LCD
-
+#define LCD_SCREEN_ROTATE 180
 //
 // Ender-2 OEM display, a variant of the MKS_MINI_12864
 //
