@@ -204,7 +204,7 @@
 // Heated Bed Bang-Bang options
 //
 #if DISABLED(PIDTEMPBED)
-  #define BED_CHECK_INTERVAL 5000   // (ms) Interval between checks in bang-bang control
+  #define BED_CHECK_INTERVAL 1500   // (ms) Interval between checks in bang-bang control
   #if ANY(BED_LIMIT_SWITCHING, PELTIER_BED)
     #define BED_HYSTERESIS 2        // (°C) Only set the relevant heater state when ABS(T-target) > BED_HYSTERESIS
   #endif
@@ -1834,7 +1834,7 @@
    * Reinit the LCD after SD Card insert/remove or when entering the menu.
    * Required for some LCDs that use shared SPI with an external SD Card reader.
    */
-  #define REINIT_NOISY_LCD
+  //#define REINIT_NOISY_LCD
 
   // The standard SD detect circuit reads LOW when media is inserted and HIGH when empty.
   // Enable this option and set to HIGH if your SD cards are incorrectly detected.
