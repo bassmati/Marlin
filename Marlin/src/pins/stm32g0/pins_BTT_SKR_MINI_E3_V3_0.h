@@ -509,13 +509,13 @@
 #endif
 
 #define ONBOARD_SPI_DEVICE                     1  // SPI1 -> used only by HAL/STM32F1...
-#define ONBOARD_SD_CS_PIN                   PA4   // Chip select for "System" SD card
+#define ONBOARD_SD_CS_PIN                   PA4   // Chip select for "System" SD card (not used anymore - SPI1_03_PIN used instead)
 
 #define ENABLE_SPI1
-#define SD_SS_PIN              ONBOARD_SD_CS_PIN
-#define SD_SCK_PIN                          PA5
-#define SD_MISO_PIN                         PA6
-#define SD_MOSI_PIN                         PA7
+#define SD_SS_PIN                   SPI1_03_PIN
+#define SD_SCK_PIN                  SPI1_04_PIN
+#define SD_MISO_PIN                 SPI1_06_PIN
+#define SD_MOSI_PIN                 SPI1_05_PIN
 
 //
 // NeoPixel
