@@ -606,26 +606,44 @@ void MarlinUI::init() {
 
             if (RRK(EN_KEYPAD_PREHEAT)){
               SERIAL_ECHO_MSG("Button PREHEAT pressed (bit ",EN_KEYPAD_PREHEAT,")");
-              /*clear_menu_history();
-              quick_feedback();
-              goto_screen(menu_move); // this is the "motion" menu command, missing the DS funcionality here?!?!
-              */
+              if (!(marlin.printingIsActive() || marlin.printingIsPaused())) { // if NOT printing
+                if (motion.position.Z < 10) {
+                  queue.inject_P(PSTR("G1 Z10")); // RASE Z AXIS
+                }
+
+                static uint8_t preheatState = 0;
+
+                switch (preheatState) {
+                case 0: // preheat - case #1
+                  preheat_all(0);
+                  preheatState++;
+                  break;
+
+                case 1: // preheat - case #2
+                  preheat_all(1);
+                  preheatState++;
+                  break;
+
+                case 2: // cool down
+                  preheat_all(2);
+                  preheatState = 0;
+                  break;
+
+                default:
+                  preheatState = 0;
+                  break;
+                }
+              }
             }
             if (RRK(EN_KEYPAD_SD)){
               SERIAL_ECHO_MSG("Button SD pressed (bit ",EN_KEYPAD_SD,")");
-              /*
               clear_menu_history();
               quick_feedback();
               goto_screen(MEDIA_MENU_GATEWAY); // hopefully the "SD menu"
-              */
             }
             if (RRK(EN_KEYPAD_PLYPSE)){
               SERIAL_ECHO_MSG("Button play/pause pressed (bit ",EN_KEYPAD_PLYPSE,")");
-              /*
-              clear_menu_history();
-              quick_feedback();
-              goto_screen(menu_main); // hopefully the "main menu"
-              */
+              queue.inject_P(PSTR("M108")); // Break and Continue command
             }
 
             if (RRK(EN_KEYPAD_DOWN)){
@@ -645,22 +663,33 @@ void MarlinUI::init() {
               SERIAL_ECHO_MSG("OK pressed (bit ",EN_KEYPAD_OK,")");
             }
 
-            if (RRK(EN_KEYPAD_ZDOWN)) SERIAL_ECHO_MSG("Z down pressed (bit ",EN_KEYPAD_ZDOWN,")"); // move to "homed" loop after testing
-
             #if NONE(DELTA, Z_HOME_TO_MAX)
-              if (RRK(EN_KEYPAD_ZUP)) SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");//  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command, WORKS
+              if (RRK(EN_KEYPAD_ZUP)) {
+                SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
+                _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
+              }
             #endif
 
             if (homed) {
               #if ANY(DELTA, Z_HOME_TO_MAX)
-                //if (RRK(EN_KEYPAD_F2))  _reprapworld_keypad_move(Z_AXIS,  1);
+                if (RRK(EN_KEYPAD_ZUP)) {
+                  SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
+                  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
+                }
               #endif
-              //if (RRK(EN_KEYPAD_ZDOWN)) LCD_MESSAGE(MSG_BIT2_ZDOWN); //_reprapworld_keypad_move(Z_AXIS, -1); // move Z down command, WORKS
+
+              if (RRK(EN_KEYPAD_ZDOWN)) {
+                SERIAL_ECHO_MSG("Z down pressed (bit ",EN_KEYPAD_ZDOWN,")");
+                _reprapworld_keypad_move(Z_AXIS, -1); // move Z down command
+              }
             }
 
           #endif // HAS_MARLINUI_MENU
 
-          if (!homed && RRK(EN_KEYPAD_HOME))  SERIAL_ECHO_MSG("HOME pressed (bit ",EN_KEYPAD_HOME,")"); // queue.inject_P(G28_STR); // home command, WORKS
+          if (!homed && RRK(EN_KEYPAD_HOME)) {
+            SERIAL_ECHO_MSG("HOME pressed (bit ",EN_KEYPAD_HOME,")");
+            queue.inject_P(G28_STR); // home command
+          }
           return true;
         }
 
