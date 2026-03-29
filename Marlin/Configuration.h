@@ -450,20 +450,20 @@
   //#define PS_ON1_EDM_PIN           9
   #define PS_EDM_RESPONSE          250  // (ms) Time to allow for relay action
 
-  //#define POWER_OFF_TIMER               // Enable M81 D<seconds> to power off after a delay
-  //#define POWER_OFF_WAIT_FOR_COOLDOWN   // Enable M81 S to power off only after cooldown
+  #define POWER_OFF_TIMER               // Enable M81 D<seconds> to power off after a delay
+  #define POWER_OFF_WAIT_FOR_COOLDOWN   // Enable M81 S to power off only after cooldown
 
   //#define PSU_POWERUP_GCODE  "M355 S1"  // G-code to run after power-on (e.g., case light on)
   //#define PSU_POWEROFF_GCODE "M355 S0"  // G-code to run before power-off (e.g., case light off)
 
   #define AUTO_POWER_CONTROL      // Enable automatic control of the PS_ON pin
   #if ENABLED(AUTO_POWER_CONTROL)
-    #define AUTO_POWER_FANS           // Turn on PSU for fans
-    #define AUTO_POWER_E_FANS         // Turn on PSU for E Fans
-    #define AUTO_POWER_CONTROLLERFAN  // Turn on PSU for Controller Fan
-    #define AUTO_POWER_CHAMBER_FAN    // Turn on PSU for Chamber Fan
-    #define AUTO_POWER_COOLER_FAN     // Turn on PSU for Cooler Fan
-    #define AUTO_POWER_SPINDLE_LASER  // Turn on PSU for Spindle/Laser
+    //#define AUTO_POWER_FANS           // Turn on PSU for fans
+    //#define AUTO_POWER_E_FANS         // Turn on PSU for E Fans
+    //#define AUTO_POWER_CONTROLLERFAN  // Turn on PSU for Controller Fan
+    //#define AUTO_POWER_CHAMBER_FAN    // Turn on PSU for Chamber Fan
+    //#define AUTO_POWER_COOLER_FAN     // Turn on PSU for Cooler Fan
+    //#define AUTO_POWER_SPINDLE_LASER  // Turn on PSU for Spindle/Laser
     #define POWER_TIMEOUT              60 // (s) Turn off power if the machine is idle for this duration
     //#define POWER_OFF_DELAY          60 // (s) Delay of poweroff after M81 command. Useful to let fans run for extra time.
   #endif
@@ -1360,7 +1360,7 @@
  * Override with M92 (when enabled below)
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 77.8, 78, 800, 849.3 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 78, 78, 800, 849.3 }
 
 /**
  * Enable support for M92. Disable to save at least ~530 bytes of flash.
