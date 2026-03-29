@@ -604,13 +604,15 @@ void MarlinUI::init() {
 
           #if HAS_MARLINUI_MENU
 
-            if (RRK(EN_KEYPAD_PREHEAT)){
-              SERIAL_ECHO_MSG("Button PREHEAT pressed (bit ",EN_KEYPAD_PREHEAT,")");
-              if (!(marlin.printingIsActive() || marlin.printingIsPaused())) { // if NOT printing
+            if (!(marlin.printingIsActive() || marlin.printingIsPaused())) { // if NOT printing
+
+              if (RRK(EN_KEYPAD_PREHEAT)) {
+
+                SERIAL_ECHO_MSG("Button PREHEAT pressed (bit ",EN_KEYPAD_PREHEAT,")");
+
                 if (motion.position.Z < 10) {
                   queue.inject_P(PSTR("G1 Z10")); // RASE Z AXIS
                 }
-
                 static uint8_t preheatState = 0;
 
                 switch (preheatState) {
@@ -634,16 +636,48 @@ void MarlinUI::init() {
                   break;
                 }
               }
+
+              if (RRK(EN_KEYPAD_HOME)) {
+                SERIAL_ECHO_MSG("HOME pressed (bit ",EN_KEYPAD_HOME,")");
+                queue.inject(F("G28 XYZ\nM84")); // home & disable steppers
+              }
+
+              #if NONE(DELTA, Z_HOME_TO_MAX)
+                if (RRK(EN_KEYPAD_ZDOWN)) {
+                  SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
+                  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
+                }
+              #endif
+
+              if (homed) {
+                #if ANY(DELTA, Z_HOME_TO_MAX)
+                  if (RRK(EN_KEYPAD_ZUP)) {
+                    SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
+                    _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
+                  }
+                #endif
+
+                if (RRK(EN_KEYPAD_ZUP)) {
+                  SERIAL_ECHO_MSG("Z down pressed (bit ",EN_KEYPAD_ZDOWN,")");
+                  _reprapworld_keypad_move(Z_AXIS, -1); // move Z down command
+                }
+              }
             }
+
             if (RRK(EN_KEYPAD_SD)){
               SERIAL_ECHO_MSG("Button SD pressed (bit ",EN_KEYPAD_SD,")");
               clear_menu_history();
               quick_feedback();
-              goto_screen(MEDIA_MENU_GATEWAY); // hopefully the "SD menu"
+              goto_screen(MEDIA_MENU_GATEWAY); // the "SD card menu"
             }
+
             if (RRK(EN_KEYPAD_PLYPSE)){
               SERIAL_ECHO_MSG("Button play/pause pressed (bit ",EN_KEYPAD_PLYPSE,")");
-              queue.inject_P(PSTR("M108")); // Break and Continue command
+              if(marlin.printingIsActive()){
+                queue.inject_P(PSTR("M108")); // Break and Continue command... another option: pause_print()
+              }else if (marlin.printingIsPaused()){
+                marlin.user_resume(); // another option if it doesn't work: resume_print()
+              }
             }
 
             if (RRK(EN_KEYPAD_DOWN)){
@@ -663,40 +697,15 @@ void MarlinUI::init() {
               SERIAL_ECHO_MSG("OK pressed (bit ",EN_KEYPAD_OK,")");
             }
 
-            #if NONE(DELTA, Z_HOME_TO_MAX)
-              if (RRK(EN_KEYPAD_ZUP)) {
-                SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
-                _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
-              }
-            #endif
-
-            if (homed) {
-              #if ANY(DELTA, Z_HOME_TO_MAX)
-                if (RRK(EN_KEYPAD_ZUP)) {
-                  SERIAL_ECHO_MSG("Z up pressed (bit ",EN_KEYPAD_ZUP,")");
-                  _reprapworld_keypad_move(Z_AXIS,  1); // move Z up command
-                }
-              #endif
-
-              if (RRK(EN_KEYPAD_ZDOWN)) {
-                SERIAL_ECHO_MSG("Z down pressed (bit ",EN_KEYPAD_ZDOWN,")");
-                _reprapworld_keypad_move(Z_AXIS, -1); // move Z down command
-              }
-            }
-
           #endif // HAS_MARLINUI_MENU
 
-          if (!homed && RRK(EN_KEYPAD_HOME)) {
-            SERIAL_ECHO_MSG("HOME pressed (bit ",EN_KEYPAD_HOME,")");
-            queue.inject_P(G28_STR); // home command
-          }
           return true;
-        }
+        } // keypad debounce
 
       #endif // !HAS_ADC_BUTTONS
 
       return false;
-    }
+    } // handle keypad
 
   #endif // IS_RRW_KEYPAD && HAS_ENCODER_ACTION
 
