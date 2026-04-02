@@ -464,11 +464,11 @@
     //#define AUTO_POWER_CHAMBER_FAN    // Turn on PSU for Chamber Fan
     //#define AUTO_POWER_COOLER_FAN     // Turn on PSU for Cooler Fan
     //#define AUTO_POWER_SPINDLE_LASER  // Turn on PSU for Spindle/Laser
-    #define POWER_TIMEOUT             300 // (s) Turn off power if the machine is idle for this duration
+    #define POWER_TIMEOUT           180 // (s) Turn off power if the machine is idle for this duration
     //#define POWER_OFF_DELAY          60 // (s) Delay of poweroff after M81 command. Useful to let fans run for extra time.
   #endif
   #if ANY(AUTO_POWER_CONTROL, POWER_OFF_WAIT_FOR_COOLDOWN)
-    #define AUTO_POWER_E_TEMP        60 // (°C) PSU on if any extruder is over this temperature
+    #define AUTO_POWER_E_TEMP        55 // (°C) PSU on if any extruder is over this temperature
     //#define AUTO_POWER_CHAMBER_TEMP  30 // (°C) PSU on if the chamber is over this temperature
     //#define AUTO_POWER_COOLER_TEMP   26 // (°C) PSU on if the cooler is over this temperature
   #endif
@@ -1973,7 +1973,7 @@
 
 // The size of the printable area
 #define X_BED_SIZE 300
-#define Y_BED_SIZE 250
+#define Y_BED_SIZE 235 // it's 250, but the new fan is chunky
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
