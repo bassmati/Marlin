@@ -1972,7 +1972,7 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 300
+#define X_BED_SIZE 285 // should be 300, dammit!
 #define Y_BED_SIZE 235 // it's 250, but the new fan is chunky
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
