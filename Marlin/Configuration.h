@@ -1360,7 +1360,7 @@
  * Override with M92 (when enabled below)
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 78, 78, 800, 820 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 78, 78, 800, 402 }
 
 /**
  * Enable support for M92. Disable to save at least ~530 bytes of flash.
@@ -1731,7 +1731,7 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 32, -5, -1 } // (mm) X, Y, Z distance from Nozzle tip to Probe trigger-point
+#define NOZZLE_TO_PROBE_OFFSET { -37, -30, -0.85 } // (mm) X, Y, Z distance from Nozzle tip to Probe trigger-point
 
 // Enable and set to use a specific tool for probing. Disable to allow any tool.
 #define PROBING_TOOL 0
@@ -1743,7 +1743,7 @@
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 10
+#define PROBING_MARGIN 35
 
 // X and Y axis travel speed between probes.
 // Leave undefined to use the average of the current XY homing feedrate.
@@ -1972,8 +1972,8 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 285 // should be 300, dammit!
-#define Y_BED_SIZE 235 // it's 250, but the new fan is chunky
+#define X_BED_SIZE 260 // should be 300, dammit!
+#define Y_BED_SIZE 220 // it's 250, but the new fan is chunky
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -1981,7 +1981,7 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 300
+#define Z_MAX_POS 285 // it can go to 295, but I'm not pushing it
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
